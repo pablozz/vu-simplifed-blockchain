@@ -1,6 +1,9 @@
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("This is going to be a blockchain!");
+
+        int USERS_AMOUNT = 1000;
+
+        Blockchain blockchain = new Blockchain(USERS_AMOUNT);
     }
 }

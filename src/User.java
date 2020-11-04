@@ -1,7 +1,7 @@
 public class User {
 
     private String name;
-    private String publicKey;
+    private final String publicKey;
     private double balance;
 
     User(String name, String publicKey, double balance) {

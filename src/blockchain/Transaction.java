@@ -1,9 +1,11 @@
+package blockchain;
+
 public class Transaction {
 
-    private String id;
-    private String fromId;
-    private String toId;
-    private double sum;
+    private final String id;
+    private final String fromId;
+    private final String toId;
+    private final double sum;
 
     Transaction(String id, String fromId, String toId, double sum) {
         this.id = id;

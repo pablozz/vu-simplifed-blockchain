@@ -1,8 +1,10 @@
+package blockchain.utils;
+
 public class HashGenerator {
 
-    public final int HASH_LENGTH = 64;
+    private static final int HASH_LENGTH = 64;
 
-    public String getHash(String input) {
+    public static String getHash(String input) {
         int hashInt = 0;
 
         for (int inputElem : input.toCharArray()) {
@@ -27,7 +29,7 @@ public class HashGenerator {
         return  hashBuilder.toString();
     }
 
-    private int stirChar(int hashInt, int elem) {
+    private static int stirChar(int hashInt, int elem) {
         hashInt += Math.pow(elem, 3);
         hashInt += ~elem % ~hashInt;
         hashInt += hashInt << ~hashInt << 1;

@@ -1,5 +1,8 @@
 package blockchain.utils;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class HashGenerator {
 
     private static final int HASH_LENGTH = 64;
@@ -35,5 +38,32 @@ public class HashGenerator {
         hashInt += hashInt << ~hashInt << 1;
 
         return hashInt;
+    }
+
+    public static String getSHA256Hash(String input) {
+        MessageDigest md = null;
+
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        if (md != null) {
+            md.update(input.getBytes());
+        }
+
+        byte[] digest = new byte[0];
+
+        if (md != null) {
+            digest = md.digest();
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (byte b : digest) {
+            sb.append(String.format("%02x", b & 0xff));
+        }
+
+        return sb.toString();
     }
 }

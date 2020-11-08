@@ -1,6 +1,5 @@
 package blockchain;
 
-import blockchain.Transaction;
 import blockchain.constants.GlobalConstants;
 import blockchain.utils.HashGenerator;
 import blockchain.utils.RandomGenerator;
@@ -12,7 +11,7 @@ import java.util.Date;
 public class Block {
 
     private final String prevHash;
-//    private final String timeStamp = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date());
+    private String timeStamp;
     private final String merkleRootHash;
     private int nonce = -1;
     private final int difficulty;
@@ -26,18 +25,20 @@ public class Block {
     }
 
     private void populateTransactions(ArrayList<Transaction> allTransactions) {
-        if (allTransactions != null && allTransactions.size() >= 100) {
+        int allTransactionsSize = allTransactions != null ? allTransactions.size() : 0;
+
+        if (allTransactions != null && allTransactionsSize >= 100) {
             Transaction randomTransaction;
             ArrayList<Integer> randomNums = new ArrayList<>();
             for (int i = 0; i < 100; i++) {
-                int randomNum = RandomGenerator.getRandomInt(0, allTransactions.size());
+                int randomIndex = RandomGenerator.getRandomInt(0, allTransactionsSize - 1);
 
-                while (randomNums.contains(randomNum)) {
-                    randomNum = RandomGenerator.getRandomInt(0, allTransactions.size());
+                while (randomNums.contains(randomIndex)) {
+                    randomIndex = RandomGenerator.getRandomInt(0, allTransactionsSize - 1);
                 }
 
-                randomTransaction = allTransactions.get(randomNum);
-                randomNums.add(randomNum);
+                randomTransaction = allTransactions.get(randomIndex);
+                randomNums.add(randomIndex);
                 blockTransactions.add(randomTransaction);
             }
         }
@@ -67,7 +68,7 @@ public class Block {
 
             for (int i =0; i < merkleSize; i += 2) {
                 String concatHashes = merkle.get(i) + merkle.get(i + 1);
-                newMerkle.add(HashGenerator.getHash(concatHashes));
+                newMerkle.add(HashGenerator.getSHA256Hash(concatHashes));
             }
 
             merkle = newMerkle;
@@ -77,10 +78,14 @@ public class Block {
     }
 
     public String getHeaderHash() {
-        return HashGenerator.getHash(GlobalConstants.VERSION + prevHash + merkleRootHash + nonce + difficulty);
+        return HashGenerator.getSHA256Hash(GlobalConstants.VERSION + prevHash + merkleRootHash + nonce + difficulty);
     }
 
-    public boolean mine() {
+    public ArrayList<Transaction> getBlockTransactions() {
+        return blockTransactions;
+    }
+
+    public void mine() {
         boolean isMined = false;
 
         while (!isMined) {
@@ -90,17 +95,20 @@ public class Block {
             int suitableCharsCount = 0;
 
             for (int i = 0; i < difficulty; i++) {
-                if(newHash.charAt(i) == '1') {
+                if(newHash.charAt(i) == '0') {
                     suitableCharsCount++;
                 }
             }
 
             if (suitableCharsCount == difficulty) {
-                System.out.println(newHash);
                 isMined = true;
             }
         }
 
-        return true;
+        timeStamp = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date());
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
     }
 }

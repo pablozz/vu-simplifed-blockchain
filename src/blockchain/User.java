@@ -2,7 +2,7 @@ package blockchain;
 
 public class User {
 
-    private String name;
+    private final String name;
     private final String publicKey;
     private double balance;
 
@@ -12,27 +12,23 @@ public class User {
         this.balance = balance;
     }
 
-    void setName(String name) {
-        this.name = name;
-    }
-
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    String getPublicKey() {
+    public String getPublicKey() {
         return publicKey;
     }
 
-    double getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    void increaseBalance(double amount) {
+    public void increaseBalance(double amount) {
         this.balance += amount;
     }
 
-    void reduceBalance(double amount) {
+    public void reduceBalance(double amount) {
         this.balance -= amount;
     }
 }

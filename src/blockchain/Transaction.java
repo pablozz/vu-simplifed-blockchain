@@ -29,8 +29,4 @@ public class Transaction {
     public double getSum() {
         return sum;
     }
-
-//    public void transact(String fromId, String toId, double sum) {
-//
-//    }
 }

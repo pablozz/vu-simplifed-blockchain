@@ -1,5 +1,6 @@
 package blockchain;
 
+import blockchain.constants.Constants;
 import blockchain.utils.HashGenerator;
 import blockchain.utils.RandomGenerator;
 
@@ -13,18 +14,17 @@ public class BlockchainPlatform {
     private final Blockchain blockchain = new Blockchain();
 
     public BlockchainPlatform() {
-        int USERS_AMOUNT = 1000;
-        users = generateRandomUsers(USERS_AMOUNT);
+        users = generateRandomUsers();
         transactions = generateRandomTransactions(users);
     }
 
-    private static HashMap<String, User> generateRandomUsers(int usersAmount) {
+    private static HashMap<String, User> generateRandomUsers() {
         HashMap<String, User> users = new HashMap<>();
 
-        for (int i = 0; i < usersAmount; i++) {
+        for (int i = 0; i < Constants.USERS_AMOUNT; i++) {
             String name = "User" + (i + 1);
             String publicKey = HashGenerator.getSHA256Hash(Integer.toString(i));
-            double balance = RandomGenerator.getRandomDouble(1000, 1000000);
+            double balance = RandomGenerator.getRandomDouble(Constants.MIN_BALANCE, Constants.MAX_BALANCE);
             User newUser = new User(name, publicKey, balance);
 
             users.put(publicKey, newUser);
@@ -37,7 +37,7 @@ public class BlockchainPlatform {
         ArrayList<Transaction> transactions = new ArrayList<>();
         Transaction transaction;
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < Constants.TRANSACTIONS_AMOUNT; i++) {
             String randomFromUserKey = (String) users.keySet().toArray()[RandomGenerator.getRandomInt(0, users.size() - 1)];
             User fromUser = users.get(randomFromUserKey);
 
@@ -57,14 +57,18 @@ public class BlockchainPlatform {
     }
 
     public void mineBlocks() {
+        int blockNr = 0;
         while (transactions.size() >= 100) {
-            Block block = new Block(blockchain.getLastChainBlock().getHeaderHash(), 3, transactions);
+            Block block = new Block(blockchain.getLastChainBlock().getHeaderHash(), 4, transactions);
             block.mine();
 
             ArrayList<Transaction> blockTransactions = block.getBlockTransactions();
             completeTransactions(blockTransactions);
 
             transactions.removeAll(blockTransactions);
+
+            blockNr++;
+//            System.out.println(blockNr + ") " + block.getTimeStamp() + ' ' + block.getHeaderHash());
             blockchain.addBlockToChain(block);
         }
     }

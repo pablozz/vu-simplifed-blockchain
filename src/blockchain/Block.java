@@ -1,6 +1,6 @@
 package blockchain;
 
-import blockchain.constants.GlobalConstants;
+import blockchain.constants.Constants;
 import blockchain.utils.HashGenerator;
 import blockchain.utils.RandomGenerator;
 
@@ -11,7 +11,7 @@ import java.util.Date;
 public class Block {
 
     private final String prevHash;
-    private String timeStamp;
+    private final String timeStamp;
     private final String merkleRootHash;
     private int nonce = -1;
     private final int difficulty;
@@ -21,6 +21,7 @@ public class Block {
         this.prevHash = prevHash;
         this.merkleRootHash = getMerkleRootHash();
         this.difficulty = difficulty;
+        timeStamp = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date());
         populateTransactions(allTransactions);
     }
 
@@ -78,7 +79,7 @@ public class Block {
     }
 
     public String getHeaderHash() {
-        return HashGenerator.getSHA256Hash(GlobalConstants.VERSION + prevHash + merkleRootHash + nonce + difficulty);
+        return HashGenerator.getSHA256Hash(prevHash + timeStamp + Constants.VERSION + merkleRootHash + nonce + difficulty);
     }
 
     public ArrayList<Transaction> getBlockTransactions() {
@@ -104,8 +105,6 @@ public class Block {
                 isMined = true;
             }
         }
-
-        timeStamp = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date());
     }
 
     public String getTimeStamp() {

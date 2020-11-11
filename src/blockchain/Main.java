@@ -9,9 +9,9 @@ public class Main {
 
         blockchainPlatform.mineBlocks();
 
-        Blockchain blockchain = blockchainPlatform.getBlockchain();
+//        Blockchain blockchain = blockchainPlatform.getBlockchain();
 
-        printBlocks(blockchain.getChain());
+//        printBlocks(blockchain.getChain());
     }
 
     private static void printBlocks(ArrayList<Block> chain) {

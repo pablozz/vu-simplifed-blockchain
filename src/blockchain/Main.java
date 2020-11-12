@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         BlockchainPlatform blockchainPlatform = new BlockchainPlatform();
 
-        blockchainPlatform.mineBlocks();
+        blockchainPlatform.mineBlocks(3);
 
 //        Blockchain blockchain = blockchainPlatform.getBlockchain();
 

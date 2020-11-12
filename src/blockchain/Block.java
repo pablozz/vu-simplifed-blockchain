@@ -7,6 +7,7 @@ import blockchain.utils.RandomGenerator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Block {
 
@@ -15,34 +16,14 @@ public class Block {
     private final String merkleRootHash;
     private int nonce = -1;
     private final int difficulty;
-    private final ArrayList<Transaction> blockTransactions = new ArrayList<>();
+    private ArrayList<Transaction> blockTransactions = new ArrayList<>();
 
-    public Block(String prevHash, int difficulty, ArrayList<Transaction> allTransactions) {
+    public Block(String prevHash, int difficulty, ArrayList<Transaction> transactions) {
         this.prevHash = prevHash;
         this.merkleRootHash = getMerkleRootHash();
         this.difficulty = difficulty;
         timeStamp = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date());
-        populateTransactions(allTransactions);
-    }
-
-    private void populateTransactions(ArrayList<Transaction> allTransactions) {
-        int allTransactionsSize = allTransactions != null ? allTransactions.size() : 0;
-
-        if (allTransactions != null && allTransactionsSize >= 100) {
-            Transaction randomTransaction;
-            ArrayList<Integer> randomNums = new ArrayList<>();
-            for (int i = 0; i < 100; i++) {
-                int randomIndex = RandomGenerator.getRandomInt(0, allTransactionsSize - 1);
-
-                while (randomNums.contains(randomIndex)) {
-                    randomIndex = RandomGenerator.getRandomInt(0, allTransactionsSize - 1);
-                }
-
-                randomTransaction = allTransactions.get(randomIndex);
-                randomNums.add(randomIndex);
-                blockTransactions.add(randomTransaction);
-            }
-        }
+        blockTransactions = transactions;
     }
 
     private String getMerkleRootHash() {

@@ -8,4 +8,7 @@ public class Constants {
     public static final int USERS_AMOUNT = 1000;
     public static final int TRANSACTIONS_AMOUNT = 10000;
     public static final int BLOCK_TRANSACTIONS_AMOUNT = 100;
+    public static final int BLOCK_CANDIDATES_AMOUNT = 100;
+    public static final int MINE_TRIALS_AMOUNT = 100000;
+    public static final int MINE_DIFFICULTY = 3;
 }

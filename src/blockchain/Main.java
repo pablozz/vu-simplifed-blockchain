@@ -1,5 +1,7 @@
 package blockchain;
 
+import blockchain.constants.Constants;
+
 import java.util.ArrayList;
 
 public class Main {
@@ -7,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         BlockchainPlatform blockchainPlatform = new BlockchainPlatform();
 
-        blockchainPlatform.mineBlocks(3);
+        blockchainPlatform.mineBlocks(Constants.MINE_DIFFICULTY);
 
 //        Blockchain blockchain = blockchainPlatform.getBlockchain();
 

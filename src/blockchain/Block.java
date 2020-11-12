@@ -2,12 +2,10 @@ package blockchain;
 
 import blockchain.constants.Constants;
 import blockchain.utils.HashGenerator;
-import blockchain.utils.RandomGenerator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class Block {
 
@@ -16,7 +14,7 @@ public class Block {
     private final String merkleRootHash;
     private int nonce = -1;
     private final int difficulty;
-    private ArrayList<Transaction> blockTransactions = new ArrayList<>();
+    private final ArrayList<Transaction> blockTransactions;
 
     public Block(String prevHash, int difficulty, ArrayList<Transaction> transactions) {
         this.prevHash = prevHash;
@@ -27,7 +25,7 @@ public class Block {
     }
 
     private String getMerkleRootHash() {
-        if (blockTransactions.isEmpty()) {
+        if (blockTransactions == null) {
             return null;
         } else if (blockTransactions.size() == 1) {
             return blockTransactions.get(0).getId();
@@ -67,11 +65,13 @@ public class Block {
         return blockTransactions;
     }
 
-    public void mine() {
+    public boolean isMined(int mineTrials) {
         boolean isMined = false;
+        int trialsCount = 0;
 
-        while (!isMined) {
+        while (trialsCount <= mineTrials && !isMined) {
             nonce++;
+            trialsCount++;
 
             String newHash = getHeaderHash();
             int suitableCharsCount = 0;
@@ -86,6 +86,8 @@ public class Block {
                 isMined = true;
             }
         }
+
+        return isMined;
     }
 
     public String getTimeStamp() {

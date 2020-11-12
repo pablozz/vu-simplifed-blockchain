@@ -59,18 +59,39 @@ public class BlockchainPlatform {
     public void mineBlocks(int difficulty) {
         int blockNr = 0;
         while (transactions.size() >= 100) {
-            Block block = new Block(blockchain.getLastChainBlock().getHeaderHash(), difficulty, pullBlockTransactions());
-            block.mine();
+            ArrayList<Block> blockCandidates = generateBlockList(Constants.BLOCK_CANDIDATES_AMOUNT, difficulty);
+            Block minedBlock = null;
 
-            ArrayList<Transaction> blockTransactions = block.getBlockTransactions();
+            int mineTrialsAmount = Constants.MINE_TRIALS_AMOUNT;
+            while(minedBlock == null) {
+                for (Block blockCandidate: blockCandidates) {
+                    if (blockCandidate.isMined(mineTrialsAmount)) {
+                        minedBlock = blockCandidate;
+                    }
+                }
+                mineTrialsAmount *= 2;
+            }
+
+            ArrayList<Transaction> blockTransactions = minedBlock.getBlockTransactions();
             completeTransactions(blockTransactions);
 
             transactions.removeAll(blockTransactions);
 
             blockNr++;
-            System.out.println(blockNr + ") " + block.getTimeStamp() + ' ' + block.getHeaderHash());
-            blockchain.addBlockToChain(block);
+            System.out.println(blockNr + ") " + minedBlock.getTimeStamp() + ' ' + minedBlock.getHeaderHash());
+            blockchain.addBlockToChain(minedBlock);
         }
+    }
+
+    private ArrayList<Block> generateBlockList(int blocksAmount, int difficulty) {
+        ArrayList<Block> blocks = new ArrayList<>();
+
+        for (int i = 0; i < blocksAmount; i++) {
+            Block block = new Block(blockchain.getLastChainBlock().getHeaderHash(), difficulty, pullBlockTransactions());
+            blocks.add(block);
+        }
+
+        return blocks;
     }
 
     private void completeTransactions(ArrayList<Transaction> blockTransactions) {
@@ -114,7 +135,6 @@ public class BlockchainPlatform {
                 String randomUserHash = HashGenerator.getSHA256Hash(randomTransaction.getFromId() + randomTransaction.getToId() + randomTransaction.getSum());
 
                 if(randomTransaction.getId().equals(randomUserHash)) {
-                    System.out.println(randomTransaction.getId().equals(randomUserHash));
                     String fromUserId = randomTransaction.getFromId();
                     double senderBalance = senderBalances.get(fromUserId) != null ? senderBalances.get(fromUserId) : 0;
 

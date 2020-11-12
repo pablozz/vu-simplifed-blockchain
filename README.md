@@ -19,6 +19,6 @@
 
 #### Naudojimas
 
-Programa parašyta _Java_ programavimo kalba, todėl projektą galima paleisti su _java_ komanda arba per bet kokį Java palaikantį _IDE_.
+Programa parašyta _Java_ programavimo kalba, todėl projektą galima paleisti su _java_ komanda komandinėje eilutėje arba per bet kokį Java palaikantį _IDE_.
 
 ```src/blockchain/constants/Constants``` faile yra konstantos, kurias galima keisti pagal poreikį.
